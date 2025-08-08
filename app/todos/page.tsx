@@ -11,7 +11,7 @@ export default async function TodosPage() {
   const cookieStore = await cookies();
   const sessionId = cookieStore.get("session-id")?.value;
   let isAuthorized = false;
-  let todos = [];
+  let todos: any[] = [];
   let userId
 
   if (sessionId) {
