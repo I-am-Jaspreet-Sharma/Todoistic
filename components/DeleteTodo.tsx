@@ -5,6 +5,10 @@ interface Props {
   id: string;
 }
 
+function getErrorMessage(err: unknown): string {
+  return err instanceof Error ? err.message : String(err);
+}
+
 export default function DeleteTodo({ userId, id }: Props) {
   async function handleDelete() {
     const confirmed = confirm("Are you sure you want to delete this todo?");
@@ -27,7 +31,7 @@ export default function DeleteTodo({ userId, id }: Props) {
 
       window.location.reload(); // 🔄 Refresh page to reflect deletion
     } catch (err) {
-      alert("Error deleting todo: " + err.message);
+      alert("Error updating todo: " + getErrorMessage(err));
     }
   }
 

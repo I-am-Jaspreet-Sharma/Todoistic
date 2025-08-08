@@ -3,9 +3,9 @@ import dbConnect from "@/db/connection/dbConnect";
 import Session from "@/db/models/Session";
 import UpdateTodo from "@/components/UpdateTodo";
 
-export default async function UpdateTodoPage({ params }) {
-  const id = params.id; // ✅ dynamic segment [id]
-  const cookieStore = cookies();
+export default async function UpdateTodoPage({ params }: {params: Promise<{id: string}>}) {
+  const id = (await params).id; // ✅ dynamic segment [id]
+  const cookieStore = await cookies();
   const sessionId = cookieStore.get("session-id")?.value;
 
   let isAuthorized = false;

@@ -41,7 +41,11 @@ export default function CheckBox({ userId, _id, task, isCompleted }: Props) {
 
       router.refresh(); // ✅ No page navigation needed
     } catch (err: unknown) {
-      setError(err.message);
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError(String(err)); // fallback for non-Error throws
+      }
     } finally {
       setLoading(false);
     }

@@ -8,6 +8,10 @@ interface Props {
   id: string;
 }
 
+function getErrorMessage(err: unknown): string {
+  return err instanceof Error ? err.message : String(err);
+}
+
 export default function UpdateTodo({ userId, id }: Props) {
   const [task, setTask] = useState("");
   const router = useRouter();
@@ -38,7 +42,7 @@ export default function UpdateTodo({ userId, id }: Props) {
       router.push("/todos");
       router.refresh();
     } catch (err) {
-      alert("Error updating todo: " + err.message);
+      alert("Error updating todo: " + getErrorMessage(err));
     }
   }
 

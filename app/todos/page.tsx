@@ -7,13 +7,32 @@ import DeleteTodo from "@/components/DeleteTodo"
 import CheckBox from "@/components/CheckBox"
 import Link from "next/link"
 import mongoose from "mongoose"
-import {ITodo} from "@/db/models/Todo"
+
+// For MongoDB documents (lean)
+interface ITodoLeanDB {
+  _id: mongoose.Types.ObjectId;
+  userId: mongoose.Types.ObjectId;
+  task: string;
+  isCompleted: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+// For todos after mapping to strings for UI
+interface ITodoLeanClient {
+  _id: string;
+  userId: string;
+  task: string;
+  isCompleted: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
 
 export default async function TodosPage() {
   const cookieStore = await cookies();
   const sessionId = cookieStore.get("session-id")?.value;
   let isAuthorized = false;
-  let todos: ITodo[] = [];
+  let todos: ITodoLeanClient[] = [];
   let userId: mongoose.Types.ObjectId
 
   if (sessionId) {
@@ -22,8 +41,19 @@ export default async function TodosPage() {
     isAuthorized = !!session;
 
     if (isAuthorized) {
-      todos = await Todo.find({ userId: session.userId }).lean();
-      userId = session.userId
+      const docs = await Todo.find({ userId: session.userId })
+      .lean<ITodoLeanDB[]>();
+
+      todos = docs.map((doc) => ({
+        _id: doc._id.toString(),
+        userId: doc.userId.toString(),
+        task: doc.task,
+        isCompleted: doc.isCompleted,
+        createdAt: doc.createdAt,
+        updatedAt: doc.updatedAt,
+      }));
+
+      userId = session.userId;
     }
   }
 
@@ -41,27 +71,30 @@ export default async function TodosPage() {
       <CreateTodo/>
 
       <ul className="space-y-4">
-        {todos.map((todo: ITodo) => (
+        {todos.map((todo) => (
           <li
-            key={todo._id.toString()}
+            key={todo._id}
             className="flex justify-between items-center border px-3 py-2 rounded"
           >
             <div className="flex items-center gap-2">
-              <CheckBox _id={todo._id.toString()} userId={todo.userId.toString()} task={todo.task} isCompleted={todo.isCompleted}/>
-              <span
-                className={todo.isCompleted ? "line-through text-gray-500" : ""}
-              >
+              <CheckBox
+                _id={todo._id}
+                userId={todo.userId}
+                task={todo.task}
+                isCompleted={todo.isCompleted}
+              />
+              <span className={todo.isCompleted ? "line-through text-gray-500" : ""}>
                 {todo.task}
               </span>
             </div>
 
             <div className="flex gap-2">
-              <Link href={`/todos/update/${todo._id.toString()}`}>
+              <Link href={`/todos/update/${todo._id}`}>
                 Update
               </Link>
               <DeleteTodo
                 userId={userId.toString()}
-                id={todo._id.toString()}
+                id={todo._id}
               />
             </div>
           </li>

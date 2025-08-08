@@ -31,7 +31,11 @@ export default function CreateTodo() {
       // Refresh the page to see the new todo
       window.location.reload();
     } catch (err: unknown) {
-      setError(err.message);
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError(String(err)); // fallback for non-Error throws
+      }
     } finally {
       setLoading(false);
     }
