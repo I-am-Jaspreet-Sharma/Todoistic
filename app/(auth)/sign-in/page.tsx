@@ -33,7 +33,7 @@ export default function SignInPage() {
 
       router.push("/"); // Redirect on success
       router.refresh()
-    } catch () {
+    } catch (err: unknown) {
       setError("Failed to connect to server.");
     } finally {
       setLoading(false);

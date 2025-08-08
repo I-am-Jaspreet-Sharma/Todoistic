@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
       { message: "Todo created successfully" },
       { status: 200 }
     );
-  } catch () {
+  } catch (err: unknown) {
     return NextResponse.json(
       { error: "Error in creating todo" },
       { status: 500 }

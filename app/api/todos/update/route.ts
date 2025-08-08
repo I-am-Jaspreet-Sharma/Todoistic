@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
       { message: "Todo updated successfully", todo: updatedTodo },
       { status: 200 }
     );
-  } catch () {
+  } catch (err: unknown) {
     return NextResponse.json(
       { error: "Error in updating todo" },
       { status: 500 }
