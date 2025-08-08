@@ -7,12 +7,13 @@ import DeleteTodo from "@/components/DeleteTodo"
 import CheckBox from "@/components/CheckBox"
 import Link from "next/link"
 import mongoose from "mongoose"
+import {ITodo} from "@/db/models/Todo"
 
 export default async function TodosPage() {
   const cookieStore = await cookies();
   const sessionId = cookieStore.get("session-id")?.value;
   let isAuthorized = false;
-  let todos: unknown[] = [];
+  let todos: ITodo[] = [];
   let userId: mongoose.Types.ObjectId
 
   if (sessionId) {
@@ -40,7 +41,7 @@ export default async function TodosPage() {
       <CreateTodo/>
 
       <ul className="space-y-4">
-        {todos.map((todo) => (
+        {todos.map((todo: ITodo) => (
           <li
             key={todo._id.toString()}
             className="flex justify-between items-center border px-3 py-2 rounded"
