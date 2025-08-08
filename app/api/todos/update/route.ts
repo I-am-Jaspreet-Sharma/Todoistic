@@ -47,6 +47,7 @@ export async function POST(request: NextRequest) {
   } catch (err: unknown) {
     return NextResponse.json(
       { error: "Error in updating todo" },
+      err,
       { status: 500 }
     );
   }

@@ -34,6 +34,7 @@ export default function SignInPage() {
       router.push("/"); // Redirect on success
       router.refresh()
     } catch (err: unknown) {
+      console.log(err)
       setError("Failed to connect to server.");
     } finally {
       setLoading(false);

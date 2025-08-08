@@ -6,13 +6,14 @@ import CreateTodo from "@/components/CreateTodo"
 import DeleteTodo from "@/components/DeleteTodo"
 import CheckBox from "@/components/CheckBox"
 import Link from "next/link"
+import mongoose from "mongoose"
 
 export default async function TodosPage() {
   const cookieStore = await cookies();
   const sessionId = cookieStore.get("session-id")?.value;
   let isAuthorized = false;
   let todos: unknown[] = [];
-  let userId
+  let userId: mongoose.Types.ObjectId
 
   if (sessionId) {
     await dbConnect();
