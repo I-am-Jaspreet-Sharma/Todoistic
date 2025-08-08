@@ -30,7 +30,7 @@ export default function CreateTodo() {
       setTask("");
       // Refresh the page to see the new todo
       window.location.reload();
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError(err.message);
     } finally {
       setLoading(false);

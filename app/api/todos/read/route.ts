@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
     const todos = await Todo.find({ userId });
 
     return NextResponse.json(todos, { status: 200 });
-  } catch (error) {
+  } catch () {
     return NextResponse.json({ error: "Error in reading todos" }, { status: 500 });
   }
 }

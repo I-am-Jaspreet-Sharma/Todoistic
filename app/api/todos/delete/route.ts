@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({ message: "Todo deleted successfully" }, { status: 200 });
-  } catch (error) {
+  } catch () {
     return NextResponse.json({ error: "Error in deleting todo" }, { status: 500 });
   }
 }

@@ -40,7 +40,7 @@ export default function CheckBox({ userId, _id, task, isCompleted }: Props) {
       }
 
       router.refresh(); // ✅ No page navigation needed
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError(err.message);
     } finally {
       setLoading(false);
