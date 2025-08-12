@@ -15,7 +15,7 @@ export async function POST(req: NextRequest){
   }
 
   await dbConnect()
-  const user = await User.findOne({email: email})
+  const user = await User.findOne({ email: email }).select('email password').lean()
 
   if(!user){
     return NextResponse.json(

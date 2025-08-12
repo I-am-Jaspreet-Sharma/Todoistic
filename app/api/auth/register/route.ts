@@ -13,7 +13,7 @@ export async function POST(req: NextRequest){
   }
 
   await dbConnect()
-  const existingUser = await User.findOne({email: email})
+  const existingUser = await User.findOne({ email: email }).select('email password').lean()
   if(existingUser){
     return NextResponse.json(
       {error: "User already exists"},

@@ -50,7 +50,9 @@ export async function GET(req: NextRequest){
   }
 
   await dbConnect()
-  const todos = await Todo.find({userId: userId}).lean()
+  const todos = await Todo.find({ userId })
+    .select('_id task isCompleted')
+    .lean();
   return NextResponse.json(
     todos,
     {status: 200}
@@ -79,7 +81,7 @@ export async function PUT(req: NextRequest){
 
   try {
     await dbConnect();
-    const updatedTodo = await Todo.findOneAndUpdate({_id: _id, userId: userId},{ task, isCompleted },{new: true});
+    const updatedTodo = await Todo.findOneAndUpdate({_id: _id, userId: userId},{ task, isCompleted },{new: true}).select('_id task isCompleted').lean()
 
     if (!updatedTodo) {
       return NextResponse.json(
@@ -114,7 +116,7 @@ export async function DELETE(req: NextRequest){
 
   try {
     await dbConnect();
-    const deletedTodo = await Todo.findOneAndDelete({_id: _id, userId: userId});
+    const deletedTodo = await Todo.findOneAndDelete({_id: _id, userId: userId}).select('_id task isCompleted').lean()
 
     return NextResponse.json(
       { message: "Todo deleted successfully", todo: deletedTodo },
