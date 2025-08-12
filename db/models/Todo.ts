@@ -13,7 +13,8 @@ const todoSchema = new mongoose.Schema<ITodo>({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-    required: true
+    required: true,
+    index: true
   },
   task: {
     type: String,
