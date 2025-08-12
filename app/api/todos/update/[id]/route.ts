@@ -19,7 +19,7 @@ export async function GET(req: NextRequest, context: unknown) {
   const { id } = (context as Context).params;
   try {
     await dbConnect()
-    const todo = await Todo.findOne({_id: id, userId: userId})
+    const todo = await Todo.findOne({_id: id, userId: userId}).lean()
     if (!todo) {
       return NextResponse.json({ error: "Todo not found" }, { status: 404 })
     }
