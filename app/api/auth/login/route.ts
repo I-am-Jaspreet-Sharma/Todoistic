@@ -3,6 +3,13 @@ import User from "@/db/models/User"
 import {NextRequest, NextResponse} from "next/server"
 import { SignJWT } from 'jose'
 import bcrypt from "bcryptjs"
+import mongoose from "mongoose"
+
+interface UserLean {
+  _id: mongoose.Types.ObjectId;
+  email: string;
+  password: string;
+}
 
 export async function POST(req: NextRequest){
   const {email, password} = await req.json()
@@ -15,7 +22,7 @@ export async function POST(req: NextRequest){
   }
 
   await dbConnect()
-  const user = await User.findOne({ email: email }).select('email password').lean()
+  const user = await User.findOne({ email: email }).select('_id email password').lean<UserLean>()
 
   if(!user){
     return NextResponse.json(
@@ -46,7 +53,7 @@ export async function POST(req: NextRequest){
   })
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
-    .setSubject(user.id.toString()) // Added for JWT best practices
+    .setSubject(user._id.toString()) // Added for JWT best practices
     .setExpirationTime('15m')
     .sign(secret)
   const res = NextResponse.json(
